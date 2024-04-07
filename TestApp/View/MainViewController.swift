@@ -1,10 +1,11 @@
 import CropViewController
 import UIKit
 
-class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, 
-                            CropViewControllerDelegate  {
+class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
+CropViewControllerDelegate  {
     
-
+    let viewModel = MainViewModel()
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -36,43 +37,19 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             return
         }
         picker.dismiss(animated: true)
-        showCrop(image: image)
+      
+        viewModel.presentingViewController = self
+        viewModel.showCrop(image: image, delegate: self)
     }
     
-    func showCrop(image: UIImage) {
-        let vc = CropViewController(croppingStyle: .default, image: image)
-        vc.aspectRatioPreset = .presetSquare
-        vc.aspectRatioLockEnabled = true
-        
-        
-        vc.doneButtonColor = .systemRed
-        vc.cancelButtonColor = .systemRed
-        vc.toolbarPosition = .top
-        vc.doneButtonTitle = "Save"
-        vc.cancelButtonTitle = "Back"
-        vc.delegate = self
-        
-   
-
-        // Добавляем UIView с желтой рамкой
-           let yellowBorderView = UIView(frame: CGRect(x: 11, y: 172, width:371, height: 371))
-           yellowBorderView.layer.borderColor = UIColor.yellow.cgColor
-           yellowBorderView.layer.borderWidth = 2.0
-           yellowBorderView.isUserInteractionEnabled = false
-           vc.cropView.addSubview(yellowBorderView)
-
-        present(vc, animated: true)
-        
-
-            
-    }
+  
     
     func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
         cropViewController.dismiss(animated: true)
     }
     
-    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect,
-                            angle: Int) {
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        
         cropViewController.dismiss(animated: true)
         
         // Сохраняем обрезанное изображение в галерею
@@ -93,7 +70,9 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         } else {
             // Если изображение успешно сохранено, выводим сообщение об успехе
             print("Изображение успешно сохранено в галерею")
+            
         }
     }
 }
         
+

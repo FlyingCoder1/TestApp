@@ -10,7 +10,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     let tableView = UITableView()
 
     var developerName: String?
-    var numberOfRows = 1 // Изначально одна ячейка
+    var numberOfRows = 1 
 
     override func viewDidLoad() {
         super.viewDidLoad()
